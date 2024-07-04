@@ -44,3 +44,21 @@ We take the Docker route here to avoid the hassle of installing all the dependen
     docker start checkers
     docker exec -it checkers ignite chain serve
     ```
+8. Now to have a working frontend to interact with the chain, we need to run (at this point i had to install ignite cli locally, because the node module installation of the react frontend needed a lot of space in memory and my docker container was running out of memory)
+    ```bash
+    ignite scaffold react
+    ```
+9. Then we need to create the hooks and the ts-client for the frontend to interact with the chain
+    ```bash
+    ignite generate hooks
+    ```
+10. The `ts-client` folder that is generated has a lot of issues that need to be fixed with `//@ts-ignore`. I fixed those issues manually, bascially a `{registry}` was having a mismatch in type due, so i had to ignore the type checking for that.
+11. Once that is done, we have to create the build for the `ts-client`
+    ```bash
+    yarn install && yarn build
+    ```
+12. Now we can start the frontend by running
+    ```bash
+    yarn install && yarn dev
+    ```
+
