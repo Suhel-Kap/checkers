@@ -1,19 +1,24 @@
 validation: sovereign
 version: 1
 accounts:
-- name: alice
-  coins:
-  - 20000token
-  - 200000000stake
-- name: bob
-  coins:
-  - 10000token
-  - 100000000stake
+  - name: alice
+    coins:
+      - 20000token
+      - 200000000stake
+  - name: bob
+    coins:
+      - 10000token
+      - 100000000stake
+  - name: suhel
+    coins:
+      - 10000token
+      - 100000000stake
+    mnemonic: aunt arena ecology hollow theory essence shadow crawl aim surge faint company
 faucet:
   name: bob
   coins:
-  - 5token
-  - 100000stake
+    - 5token
+    - 100000stake
 client:
   typescript:
     path: ts-client
@@ -22,5 +27,5 @@ client:
   openapi:
     path: docs/static/openapi.yml
 validators:
-- name: alice
-  bonded: 100000000stake
+  - name: alice
+    bonded: 100000000stake
