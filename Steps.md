@@ -69,5 +69,16 @@ We take the Docker route here to avoid the hassle of installing all the dependen
     ignite scaffold message createPost title body
     ```
 
+## Creating an ID handler for unique ID of each game
+
+1. We can create it using:
+   ```bash
+   ignite scaffold single systemInfo nextId:uint \
+        --module checkers \
+        --no-message
+   ```
+   You must add --no-message. If you omit it, Ignite CLI creates an sdk.Msg and an associated service whose purpose is to overwrite your SystemInfo object. However, your SystemInfo.NextId must be controlled/incremented by the application and not by a player sending a value of their own choosing. Ignite CLI still creates convenient getters.
+
+
 
 

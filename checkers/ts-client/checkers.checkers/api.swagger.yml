@@ -35,6 +35,41 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  /suhel-kap/checkers/checkers/system_info:
+    get:
+      operationId: Query_SystemInfo
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              SystemInfo:
+                type: object
+                properties:
+                  nextId:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      tags:
+        - Query
 definitions:
   Any:
     type: object
@@ -58,6 +93,15 @@ definitions:
             '@type':
               type: string
           additionalProperties: {}
+  QueryGetSystemInfoResponse:
+    type: object
+    properties:
+      SystemInfo:
+        type: object
+        properties:
+          nextId:
+            type: string
+            format: uint64
   QueryParamsResponse:
     type: object
     properties:
@@ -65,6 +109,12 @@ definitions:
         type: object
   checkers.Params:
     type: object
+  checkers.SystemInfo:
+    type: object
+    properties:
+      nextId:
+        type: string
+        format: uint64
   MsgCreatePostResponse:
     type: object
   MsgUpdateParamsResponse:

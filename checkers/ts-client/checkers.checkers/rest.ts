@@ -20,11 +20,20 @@ export interface Status {
   details?: { "@type"?: string }[];
 }
 
+export interface QueryGetSystemInfoResponse {
+  SystemInfo?: { nextId?: string };
+}
+
 export interface QueryParamsResponse {
   params?: object;
 }
 
 export type CheckersParams = object;
+
+export interface CheckersSystemInfo {
+  /** @format uint64 */
+  nextId?: string;
+}
 
 export type MsgCreatePostResponse = object;
 
@@ -166,6 +175,23 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<{ params?: object }, { code?: number; message?: string; details?: { "@type"?: string }[] }>({
       path: `/suhel-kap/checkers/checkers/params`,
+      method: "GET",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QuerySystemInfo
+   * @request GET:/suhel-kap/checkers/checkers/system_info
+   */
+  querySystemInfo = (params: RequestParams = {}) =>
+    this.request<
+      { SystemInfo?: { nextId?: string } },
+      { code?: number; message?: string; details?: { "@type"?: string }[] }
+    >({
+      path: `/suhel-kap/checkers/checkers/system_info`,
       method: "GET",
       ...params,
     });

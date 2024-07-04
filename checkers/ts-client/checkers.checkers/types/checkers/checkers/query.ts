@@ -1,6 +1,7 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
 import { Params } from "./params";
+import { SystemInfo } from "./system_info";
 
 export const protobufPackage = "checkers.checkers";
 
@@ -12,6 +13,13 @@ export interface QueryParamsRequest {
 export interface QueryParamsResponse {
   /** params holds all the parameters of this module. */
   params: Params | undefined;
+}
+
+export interface QueryGetSystemInfoRequest {
+}
+
+export interface QueryGetSystemInfoResponse {
+  SystemInfo: SystemInfo | undefined;
 }
 
 function createBaseQueryParamsRequest(): QueryParamsRequest {
@@ -116,10 +124,114 @@ export const QueryParamsResponse = {
   },
 };
 
+function createBaseQueryGetSystemInfoRequest(): QueryGetSystemInfoRequest {
+  return {};
+}
+
+export const QueryGetSystemInfoRequest = {
+  encode(_: QueryGetSystemInfoRequest, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetSystemInfoRequest {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetSystemInfoRequest();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): QueryGetSystemInfoRequest {
+    return {};
+  },
+
+  toJSON(_: QueryGetSystemInfoRequest): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<QueryGetSystemInfoRequest>, I>>(base?: I): QueryGetSystemInfoRequest {
+    return QueryGetSystemInfoRequest.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetSystemInfoRequest>, I>>(_: I): QueryGetSystemInfoRequest {
+    const message = createBaseQueryGetSystemInfoRequest();
+    return message;
+  },
+};
+
+function createBaseQueryGetSystemInfoResponse(): QueryGetSystemInfoResponse {
+  return { SystemInfo: undefined };
+}
+
+export const QueryGetSystemInfoResponse = {
+  encode(message: QueryGetSystemInfoResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.SystemInfo !== undefined) {
+      SystemInfo.encode(message.SystemInfo, writer.uint32(10).fork()).ldelim();
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): QueryGetSystemInfoResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseQueryGetSystemInfoResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.SystemInfo = SystemInfo.decode(reader, reader.uint32());
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): QueryGetSystemInfoResponse {
+    return { SystemInfo: isSet(object.SystemInfo) ? SystemInfo.fromJSON(object.SystemInfo) : undefined };
+  },
+
+  toJSON(message: QueryGetSystemInfoResponse): unknown {
+    const obj: any = {};
+    if (message.SystemInfo !== undefined) {
+      obj.SystemInfo = SystemInfo.toJSON(message.SystemInfo);
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<QueryGetSystemInfoResponse>, I>>(base?: I): QueryGetSystemInfoResponse {
+    return QueryGetSystemInfoResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<QueryGetSystemInfoResponse>, I>>(object: I): QueryGetSystemInfoResponse {
+    const message = createBaseQueryGetSystemInfoResponse();
+    message.SystemInfo = (object.SystemInfo !== undefined && object.SystemInfo !== null)
+      ? SystemInfo.fromPartial(object.SystemInfo)
+      : undefined;
+    return message;
+  },
+};
+
 /** Query defines the gRPC querier service. */
 export interface Query {
   /** Parameters queries the parameters of the module. */
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse>;
+  /** Queries a SystemInfo by index. */
+  SystemInfo(request: QueryGetSystemInfoRequest): Promise<QueryGetSystemInfoResponse>;
 }
 
 export const QueryServiceName = "checkers.checkers.Query";
@@ -130,11 +242,18 @@ export class QueryClientImpl implements Query {
     this.service = opts?.service || QueryServiceName;
     this.rpc = rpc;
     this.Params = this.Params.bind(this);
+    this.SystemInfo = this.SystemInfo.bind(this);
   }
   Params(request: QueryParamsRequest): Promise<QueryParamsResponse> {
     const data = QueryParamsRequest.encode(request).finish();
     const promise = this.rpc.request(this.service, "Params", data);
     return promise.then((data) => QueryParamsResponse.decode(_m0.Reader.create(data)));
+  }
+
+  SystemInfo(request: QueryGetSystemInfoRequest): Promise<QueryGetSystemInfoResponse> {
+    const data = QueryGetSystemInfoRequest.encode(request).finish();
+    const promise = this.rpc.request(this.service, "SystemInfo", data);
+    return promise.then((data) => QueryGetSystemInfoResponse.decode(_m0.Reader.create(data)));
   }
 }
 
