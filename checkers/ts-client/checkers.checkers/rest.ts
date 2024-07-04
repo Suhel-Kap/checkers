@@ -20,6 +20,36 @@ export interface Status {
   details?: { "@type"?: string }[];
 }
 
+export interface PageRequest {
+  /** @format byte */
+  key?: string;
+
+  /** @format uint64 */
+  offset?: string;
+
+  /** @format uint64 */
+  limit?: string;
+  count_total?: boolean;
+  reverse?: boolean;
+}
+
+export interface PageResponse {
+  /** @format byte */
+  next_key?: string;
+
+  /** @format uint64 */
+  total?: string;
+}
+
+export interface QueryAllStoredGameResponse {
+  storedGame?: { index?: string; board?: string; turn?: string; black?: string; red?: string }[];
+  pagination?: { next_key?: string; total?: string };
+}
+
+export interface QueryGetStoredGameResponse {
+  storedGame?: { index?: string; board?: string; turn?: string; black?: string; red?: string };
+}
+
 export interface QueryGetSystemInfoResponse {
   SystemInfo?: { nextId?: string };
 }
@@ -29,6 +59,14 @@ export interface QueryParamsResponse {
 }
 
 export type CheckersParams = object;
+
+export interface CheckersStoredGame {
+  index?: string;
+  board?: string;
+  turn?: string;
+  black?: string;
+  red?: string;
+}
 
 export interface CheckersSystemInfo {
   /** @format uint64 */
@@ -175,6 +213,53 @@ export class Api<SecurityDataType extends unknown> extends HttpClient<SecurityDa
   queryParams = (params: RequestParams = {}) =>
     this.request<{ params?: object }, { code?: number; message?: string; details?: { "@type"?: string }[] }>({
       path: `/suhel-kap/checkers/checkers/params`,
+      method: "GET",
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryStoredGameAll
+   * @request GET:/suhel-kap/checkers/checkers/stored_game
+   */
+  queryStoredGameAll = (
+    query?: {
+      "pagination.key"?: string;
+      "pagination.offset"?: string;
+      "pagination.limit"?: string;
+      "pagination.count_total"?: boolean;
+      "pagination.reverse"?: boolean;
+    },
+    params: RequestParams = {},
+  ) =>
+    this.request<
+      {
+        storedGame?: { index?: string; board?: string; turn?: string; black?: string; red?: string }[];
+        pagination?: { next_key?: string; total?: string };
+      },
+      { code?: number; message?: string; details?: { "@type"?: string }[] }
+    >({
+      path: `/suhel-kap/checkers/checkers/stored_game`,
+      method: "GET",
+      query: query,
+      ...params,
+    });
+
+  /**
+   * No description
+   *
+   * @tags Query
+   * @name QueryStoredGame
+   * @request GET:/suhel-kap/checkers/checkers/stored_game/{index}
+   */
+  queryStoredGame = (index: string, params: RequestParams = {}) =>
+    this.request<
+      { storedGame?: { index?: string; board?: string; turn?: string; black?: string; red?: string } },
+      { code?: number; message?: string; details?: { "@type"?: string }[] }
+    >({
+      path: `/suhel-kap/checkers/checkers/stored_game/${index}`,
       method: "GET",
       ...params,
     });

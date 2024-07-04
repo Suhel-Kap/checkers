@@ -1,6 +1,7 @@
 /* eslint-disable */
 import _m0 from "protobufjs/minimal";
 import { Params } from "./params";
+import { StoredGame } from "./stored_game";
 import { SystemInfo } from "./system_info";
 
 export const protobufPackage = "checkers.checkers";
@@ -10,10 +11,11 @@ export interface GenesisState {
   /** params defines all the parameters of the module. */
   params: Params | undefined;
   systemInfo: SystemInfo | undefined;
+  storedGameList: StoredGame[];
 }
 
 function createBaseGenesisState(): GenesisState {
-  return { params: undefined, systemInfo: undefined };
+  return { params: undefined, systemInfo: undefined, storedGameList: [] };
 }
 
 export const GenesisState = {
@@ -23,6 +25,9 @@ export const GenesisState = {
     }
     if (message.systemInfo !== undefined) {
       SystemInfo.encode(message.systemInfo, writer.uint32(18).fork()).ldelim();
+    }
+    for (const v of message.storedGameList) {
+      StoredGame.encode(v!, writer.uint32(26).fork()).ldelim();
     }
     return writer;
   },
@@ -48,6 +53,13 @@ export const GenesisState = {
 
           message.systemInfo = SystemInfo.decode(reader, reader.uint32());
           continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.storedGameList.push(StoredGame.decode(reader, reader.uint32()));
+          continue;
       }
       if ((tag & 7) === 4 || tag === 0) {
         break;
@@ -61,6 +73,9 @@ export const GenesisState = {
     return {
       params: isSet(object.params) ? Params.fromJSON(object.params) : undefined,
       systemInfo: isSet(object.systemInfo) ? SystemInfo.fromJSON(object.systemInfo) : undefined,
+      storedGameList: Array.isArray(object?.storedGameList)
+        ? object.storedGameList.map((e: any) => StoredGame.fromJSON(e))
+        : [],
     };
   },
 
@@ -71,6 +86,9 @@ export const GenesisState = {
     }
     if (message.systemInfo !== undefined) {
       obj.systemInfo = SystemInfo.toJSON(message.systemInfo);
+    }
+    if (message.storedGameList?.length) {
+      obj.storedGameList = message.storedGameList.map((e) => StoredGame.toJSON(e));
     }
     return obj;
   },
@@ -86,6 +104,7 @@ export const GenesisState = {
     message.systemInfo = (object.systemInfo !== undefined && object.systemInfo !== null)
       ? SystemInfo.fromPartial(object.systemInfo)
       : undefined;
+    message.storedGameList = object.storedGameList?.map((e) => StoredGame.fromPartial(e)) || [];
     return message;
   },
 };

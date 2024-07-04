@@ -35,6 +35,130 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  /suhel-kap/checkers/checkers/stored_game:
+    get:
+      operationId: Query_StoredGameAll
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              storedGame:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    index:
+                      type: string
+                    board:
+                      type: string
+                    turn:
+                      type: string
+                    black:
+                      type: string
+                    red:
+                      type: string
+              pagination:
+                type: object
+                properties:
+                  next_key:
+                    type: string
+                    format: byte
+                  total:
+                    type: string
+                    format: uint64
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: pagination.key
+          in: query
+          required: false
+          type: string
+          format: byte
+        - name: pagination.offset
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.limit
+          in: query
+          required: false
+          type: string
+          format: uint64
+        - name: pagination.count_total
+          in: query
+          required: false
+          type: boolean
+        - name: pagination.reverse
+          in: query
+          required: false
+          type: boolean
+      tags:
+        - Query
+  /suhel-kap/checkers/checkers/stored_game/{index}:
+    get:
+      operationId: Query_StoredGame
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              storedGame:
+                type: object
+                properties:
+                  index:
+                    type: string
+                  board:
+                    type: string
+                  turn:
+                    type: string
+                  black:
+                    type: string
+                  red:
+                    type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: index
+          in: path
+          required: true
+          type: string
+      tags:
+        - Query
   /suhel-kap/checkers/checkers/system_info:
     get:
       operationId: Query_SystemInfo
@@ -93,6 +217,74 @@ definitions:
             '@type':
               type: string
           additionalProperties: {}
+  PageRequest:
+    type: object
+    properties:
+      key:
+        type: string
+        format: byte
+      offset:
+        type: string
+        format: uint64
+      limit:
+        type: string
+        format: uint64
+      count_total:
+        type: boolean
+      reverse:
+        type: boolean
+  PageResponse:
+    type: object
+    properties:
+      next_key:
+        type: string
+        format: byte
+      total:
+        type: string
+        format: uint64
+  QueryAllStoredGameResponse:
+    type: object
+    properties:
+      storedGame:
+        type: array
+        items:
+          type: object
+          properties:
+            index:
+              type: string
+            board:
+              type: string
+            turn:
+              type: string
+            black:
+              type: string
+            red:
+              type: string
+      pagination:
+        type: object
+        properties:
+          next_key:
+            type: string
+            format: byte
+          total:
+            type: string
+            format: uint64
+  QueryGetStoredGameResponse:
+    type: object
+    properties:
+      storedGame:
+        type: object
+        properties:
+          index:
+            type: string
+          board:
+            type: string
+          turn:
+            type: string
+          black:
+            type: string
+          red:
+            type: string
   QueryGetSystemInfoResponse:
     type: object
     properties:
@@ -109,6 +301,19 @@ definitions:
         type: object
   checkers.Params:
     type: object
+  checkers.StoredGame:
+    type: object
+    properties:
+      index:
+        type: string
+      board:
+        type: string
+      turn:
+        type: string
+      black:
+        type: string
+      red:
+        type: string
   checkers.SystemInfo:
     type: object
     properties:

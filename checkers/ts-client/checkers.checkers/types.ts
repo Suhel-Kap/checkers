@@ -1,7 +1,7 @@
-import { SystemInfo } from "./types/checkers/checkers/system_info"
+import { StoredGame } from "./types/checkers/checkers/stored_game"
 
 
 export {     
-    SystemInfo,
+    StoredGame,
     
  }
