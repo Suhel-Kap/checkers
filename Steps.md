@@ -62,3 +62,12 @@ We take the Docker route here to avoid the hassle of installing all the dependen
     yarn install && yarn dev
     ```
 
+## Creating a message
+
+1. We can create a message by running
+    ```bash
+    ignite scaffold message createPost title body
+    ```
+
+
+

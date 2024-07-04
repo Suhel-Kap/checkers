@@ -8,11 +8,7 @@ export const protobufPackage = "checkers.checkers";
 export interface MsgUpdateParams {
   /** authority is the address that controls the module (defaults to x/gov unless overwritten). */
   authority: string;
-  /**
-   * params defines the module parameters to update.
-   *
-   * NOTE: All parameters must be supplied.
-   */
+  /** NOTE: All parameters must be supplied. */
   params: Params | undefined;
 }
 
@@ -21,6 +17,15 @@ export interface MsgUpdateParams {
  * MsgUpdateParams message.
  */
 export interface MsgUpdateParamsResponse {
+}
+
+export interface MsgCreatePost {
+  creator: string;
+  title: string;
+  body: string;
+}
+
+export interface MsgCreatePostResponse {
 }
 
 function createBaseMsgUpdateParams(): MsgUpdateParams {
@@ -142,6 +147,138 @@ export const MsgUpdateParamsResponse = {
   },
 };
 
+function createBaseMsgCreatePost(): MsgCreatePost {
+  return { creator: "", title: "", body: "" };
+}
+
+export const MsgCreatePost = {
+  encode(message: MsgCreatePost, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    if (message.creator !== "") {
+      writer.uint32(10).string(message.creator);
+    }
+    if (message.title !== "") {
+      writer.uint32(18).string(message.title);
+    }
+    if (message.body !== "") {
+      writer.uint32(26).string(message.body);
+    }
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePost {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCreatePost();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+        case 1:
+          if (tag !== 10) {
+            break;
+          }
+
+          message.creator = reader.string();
+          continue;
+        case 2:
+          if (tag !== 18) {
+            break;
+          }
+
+          message.title = reader.string();
+          continue;
+        case 3:
+          if (tag !== 26) {
+            break;
+          }
+
+          message.body = reader.string();
+          continue;
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(object: any): MsgCreatePost {
+    return {
+      creator: isSet(object.creator) ? String(object.creator) : "",
+      title: isSet(object.title) ? String(object.title) : "",
+      body: isSet(object.body) ? String(object.body) : "",
+    };
+  },
+
+  toJSON(message: MsgCreatePost): unknown {
+    const obj: any = {};
+    if (message.creator !== "") {
+      obj.creator = message.creator;
+    }
+    if (message.title !== "") {
+      obj.title = message.title;
+    }
+    if (message.body !== "") {
+      obj.body = message.body;
+    }
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgCreatePost>, I>>(base?: I): MsgCreatePost {
+    return MsgCreatePost.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgCreatePost>, I>>(object: I): MsgCreatePost {
+    const message = createBaseMsgCreatePost();
+    message.creator = object.creator ?? "";
+    message.title = object.title ?? "";
+    message.body = object.body ?? "";
+    return message;
+  },
+};
+
+function createBaseMsgCreatePostResponse(): MsgCreatePostResponse {
+  return {};
+}
+
+export const MsgCreatePostResponse = {
+  encode(_: MsgCreatePostResponse, writer: _m0.Writer = _m0.Writer.create()): _m0.Writer {
+    return writer;
+  },
+
+  decode(input: _m0.Reader | Uint8Array, length?: number): MsgCreatePostResponse {
+    const reader = input instanceof _m0.Reader ? input : _m0.Reader.create(input);
+    let end = length === undefined ? reader.len : reader.pos + length;
+    const message = createBaseMsgCreatePostResponse();
+    while (reader.pos < end) {
+      const tag = reader.uint32();
+      switch (tag >>> 3) {
+      }
+      if ((tag & 7) === 4 || tag === 0) {
+        break;
+      }
+      reader.skipType(tag & 7);
+    }
+    return message;
+  },
+
+  fromJSON(_: any): MsgCreatePostResponse {
+    return {};
+  },
+
+  toJSON(_: MsgCreatePostResponse): unknown {
+    const obj: any = {};
+    return obj;
+  },
+
+  create<I extends Exact<DeepPartial<MsgCreatePostResponse>, I>>(base?: I): MsgCreatePostResponse {
+    return MsgCreatePostResponse.fromPartial(base ?? ({} as any));
+  },
+  fromPartial<I extends Exact<DeepPartial<MsgCreatePostResponse>, I>>(_: I): MsgCreatePostResponse {
+    const message = createBaseMsgCreatePostResponse();
+    return message;
+  },
+};
+
 /** Msg defines the Msg service. */
 export interface Msg {
   /**
@@ -149,6 +286,7 @@ export interface Msg {
    * parameters. The authority defaults to the x/gov module account.
    */
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse>;
+  CreatePost(request: MsgCreatePost): Promise<MsgCreatePostResponse>;
 }
 
 export const MsgServiceName = "checkers.checkers.Msg";
@@ -159,11 +297,18 @@ export class MsgClientImpl implements Msg {
     this.service = opts?.service || MsgServiceName;
     this.rpc = rpc;
     this.UpdateParams = this.UpdateParams.bind(this);
+    this.CreatePost = this.CreatePost.bind(this);
   }
   UpdateParams(request: MsgUpdateParams): Promise<MsgUpdateParamsResponse> {
     const data = MsgUpdateParams.encode(request).finish();
     const promise = this.rpc.request(this.service, "UpdateParams", data);
     return promise.then((data) => MsgUpdateParamsResponse.decode(_m0.Reader.create(data)));
+  }
+
+  CreatePost(request: MsgCreatePost): Promise<MsgCreatePostResponse> {
+    const data = MsgCreatePost.encode(request).finish();
+    const promise = this.rpc.request(this.service, "CreatePost", data);
+    return promise.then((data) => MsgCreatePostResponse.decode(_m0.Reader.create(data)));
   }
 }
 

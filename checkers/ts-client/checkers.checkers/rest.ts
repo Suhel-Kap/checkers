@@ -26,6 +26,8 @@ export interface QueryParamsResponse {
 
 export type CheckersParams = object;
 
+export type MsgCreatePostResponse = object;
+
 export type MsgUpdateParamsResponse = object;
 
 export type Params = object;

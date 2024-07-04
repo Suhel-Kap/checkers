@@ -18,7 +18,7 @@ const defaultFee = {
 };
 
 export class IgniteClient extends EventEmitter {
-  static plugins: IgntModule[] = [];
+	static plugins: IgntModule[] = [];
   env: Env;
   signer?: OfflineSigner;
   registry: Array<[string, GeneratedType]> = [];
@@ -30,29 +30,19 @@ export class IgniteClient extends EventEmitter {
     }
 
     if (Array.isArray(plugin)) {
-      type Extension = UnionToIntersection<Return<T>["module"]>;
-      return AugmentedClient as typeof IgniteClient & Constructor<Extension>;
+      type Extension = UnionToIntersection<Return<T>['module']>
+      return AugmentedClient as typeof IgniteClient & Constructor<Extension>;  
     }
 
-    type Extension = Return<T>["module"];
+    type Extension = Return<T>['module']
     return AugmentedClient as typeof IgniteClient & Constructor<Extension>;
   }
 
   async signAndBroadcast(msgs: EncodeObject[], fee: StdFee, memo: string) {
     if (this.signer) {
       const { address } = (await this.signer.getAccounts())[0];
-      const signingClient = await SigningStargateClient.connectWithSigner(
-        this.env.rpcURL,
-        this.signer,
-        // @ts-ignore
-        { registry: new Registry(this.registry) }
-      );
-      return await signingClient.signAndBroadcast(
-        address,
-        msgs,
-        fee ? fee : defaultFee,
-        memo
-      );
+      const signingClient = await SigningStargateClient.connectWithSigner(this.env.rpcURL, this.signer, { registry: new Registry(this.registry) });
+      return await signingClient.signAndBroadcast(address, msgs, fee ? fee : defaultFee, memo)
     } else {
       throw new Error(" Signer is not present.");
     }
@@ -64,21 +54,21 @@ export class IgniteClient extends EventEmitter {
     this.setMaxListeners(0);
     this.signer = signer;
     const classConstructor = this.constructor as typeof IgniteClient;
-    classConstructor.plugins.forEach((plugin) => {
+    classConstructor.plugins.forEach(plugin => {
       const pluginInstance = plugin(this);
-      Object.assign(this, pluginInstance.module);
+      Object.assign(this, pluginInstance.module)
       if (this.registry) {
-        this.registry = this.registry.concat(pluginInstance.registry);
+        this.registry = this.registry.concat(pluginInstance.registry)
       }
-    });
+		});		
   }
-  useSigner(signer: OfflineSigner) {
-    this.signer = signer;
-    this.emit("signer-changed", this.signer);
+  useSigner(signer: OfflineSigner) {    
+      this.signer = signer;
+      this.emit("signer-changed", this.signer);
   }
-  removeSigner() {
-    this.signer = undefined;
-    this.emit("signer-changed", this.signer);
+  removeSigner() {    
+      this.signer = undefined;
+      this.emit("signer-changed", this.signer);
   }
   async useKeplr(keplrChainInfo: Partial<ChainInfo> = {}) {
     // Using queryClients directly because BaseClient has no knowledge of the modules at this stage
@@ -88,13 +78,11 @@ export class IgniteClient extends EventEmitter {
       ).queryClient;
       const bankQueryClient = (await import("./cosmos.bank.v1beta1/module"))
         .queryClient;
-
-      const stakingQueryClient = (
-        await import("./cosmos.staking.v1beta1/module")
-      ).queryClient;
+      
+      const stakingQueryClient = (await import("./cosmos.staking.v1beta1/module")).queryClient;
       const stakingqc = stakingQueryClient({ addr: this.env.apiURL });
       const staking = await (await stakingqc.queryParams()).data;
-
+      
       const qc = queryClient({ addr: this.env.apiURL });
       const node_info = await (await qc.serviceGetNodeInfo()).data;
       const chainId = node_info.default_node_info?.network ?? "";
@@ -128,12 +116,13 @@ export class IgniteClient extends EventEmitter {
           return y;
         }) ?? [];
 
+      
       let stakeCurrency = {
-        coinDenom: staking.params?.bond_denom?.toUpperCase() ?? "",
-        coinMinimalDenom: staking.params?.bond_denom ?? "",
-        coinDecimals: 0,
-      };
-
+              coinDenom: staking.params?.bond_denom?.toUpperCase() ?? "",
+              coinMinimalDenom: staking.params?.bond_denom ?? "",
+              coinDecimals: 0,
+            };
+      
       let feeCurrencies =
         tokens.supply?.map((x) => {
           const y = {
