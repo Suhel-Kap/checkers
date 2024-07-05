@@ -3,9 +3,9 @@
 We take the Docker route here to avoid the hassle of installing all the dependencies on our local machine.
 
 1. Have Docker Desktop up and running if you're on a Mac like me.
-2. Adjust the versions of Go, Ignite CLI and Node JS as you wish.  
+2. Adjust the versions of Go, Ignite CLI and Node JS as you wish.
    1. As of writing this, the versions I used were Go 1.22.4, Ignite CLI 28.4.0 and Node JS 20.x
-3. Then we create a docker image loaded wiht ignite CLI by 
+3. Then we create a docker image loaded wiht ignite CLI by
     ```bash
     docker build -f Dockerfile-ubuntu . -t checkers_i
     ```
@@ -20,12 +20,12 @@ We take the Docker route here to avoid the hassle of installing all the dependen
         checkers_i \
         ignite scaffold chain github.com/suhel-kap/checkers
     ```
-6. We scaffold a react frontend 
+6. We scaffold a react frontend
     ```bash
     docker run --rm -it \
     -v $(pwd):/checkers -w /checkers \
     checkers_i \
-    ignite scaffold react   
+    ignite scaffold react
     ```
 7. We serve the chain by running
    ```bash
@@ -79,6 +79,18 @@ We take the Docker route here to avoid the hassle of installing all the dependen
    ```
    You must add --no-message. If you omit it, Ignite CLI creates an sdk.Msg and an associated service whose purpose is to overwrite your SystemInfo object. However, your SystemInfo.NextId must be controlled/incremented by the application and not by a player sending a value of their own choosing. Ignite CLI still creates convenient getters.
 
+## Creating a map to store the game state
 
+1. We can create it by running:
+   ```bash
+    ignite scaffold map storedGame board turn black red \
+           --index index \
+           --module checkers \
+           --no-message
+    ```
 
+## Next we wrote a few unit tests
 
+The tests were majorly focused on checking if we are able to detect any issues in parsing or validating the board, and also the if the genesis state of the chain is correct.
+
+You can check out the tests in the `checkers/x/checkers/types/full_game_test.go` file.
