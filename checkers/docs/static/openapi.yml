@@ -253,6 +253,50 @@ paths:
                   additionalProperties: {}
       tags:
         - Query
+  /checkers.checkers.Msg/CreateGame:
+    post:
+      operationId: CheckersCheckersMsg_CreateGame
+      responses:
+        '200':
+          description: A successful response.
+          schema:
+            type: object
+            properties:
+              gameIndex:
+                type: string
+        default:
+          description: An unexpected error response.
+          schema:
+            type: object
+            properties:
+              code:
+                type: integer
+                format: int32
+              message:
+                type: string
+              details:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    '@type':
+                      type: string
+                  additionalProperties: {}
+      parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            type: object
+            properties:
+              creator:
+                type: string
+              black:
+                type: string
+              red:
+                type: string
+      tags:
+        - Msg
   /checkers.checkers.Msg/CreatePost:
     post:
       operationId: CheckersCheckersMsg_CreatePost
@@ -17073,6 +17117,20 @@ definitions:
                repeated Bar results = 1;
                PageResponse page = 2;
        }
+  checkers.checkers.MsgCreateGame:
+    type: object
+    properties:
+      creator:
+        type: string
+      black:
+        type: string
+      red:
+        type: string
+  checkers.checkers.MsgCreateGameResponse:
+    type: object
+    properties:
+      gameIndex:
+        type: string
   checkers.checkers.MsgCreatePost:
     type: object
     properties:
