@@ -94,3 +94,11 @@ We take the Docker route here to avoid the hassle of installing all the dependen
 The tests were majorly focused on checking if we are able to detect any issues in parsing or validating the board, and also the if the genesis state of the chain is correct.
 
 You can check out the tests in the `checkers/x/checkers/types/full_game_test.go` file.
+
+## Once the game is stored in the storage
+
+We can print out how the board looks in a prettifed manner by running
+```bash
+docker exec -it checkers \
+    bash -c "checkersd query checkers show-stored-game 1 --output json | jq \".storedGame.board\" | sed 's/\"//g' | sed 's/|/\n/g'"
+```
